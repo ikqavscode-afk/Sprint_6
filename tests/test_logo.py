@@ -12,7 +12,7 @@ def test_scooter_logo_returns_to_main_page(driver):
 
     page.click_scooter_logo()
 
-    assert driver.current_url == page.URL
+    assert page.get_current_url() == page.URL
 
 
 @allure.title("Проверка перехода по логотипу Яндекс в Дзен") 

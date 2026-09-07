@@ -31,4 +31,7 @@ class BasePage:
             if window != old_window][0]
 
         self.driver.switch_to.window(new_window)
+
+    def get_current_url(self):
+        return self.driver.current_url
     
