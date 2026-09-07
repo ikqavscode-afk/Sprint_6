@@ -25,13 +25,25 @@ class BasePage:
         return self.find_element(locator).text
 
     def switch_to_new_window(self, old_window):
-        self.wait.until(lambda driver: len(driver.window_handles) > 1)
+        self.wait.until(
+            lambda driver: len(driver.window_handles) > 1
+        )
 
-        new_window = [window for window in self.driver.window_handles
-            if window != old_window][0]
+        new_window = [
+            window
+            for window in self.driver.window_handles
+            if window != old_window
+        ][0]
 
         self.driver.switch_to.window(new_window)
 
     def get_current_url(self):
         return self.driver.current_url
-    
+
+    def get_current_window_handle(self):
+        return self.driver.current_window_handle
+
+    def wait_for_url_contains(self, text):
+        self.wait.until(
+            lambda driver: text in driver.current_url
+        )

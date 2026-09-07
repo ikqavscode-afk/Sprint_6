@@ -1,90 +1,10 @@
-from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
 from datetime import datetime
 
+from pages.base_page import BasePage
+from locators.order_page_locators import OrderPageLocators
 
 
 class OrderPage(BasePage):
-
-    NAME_INPUT = (
-        By.XPATH,
-        "//input[@placeholder='* Имя']"
-    )
-
-    SURNAME_INPUT = (
-        By.XPATH,
-        "//input[@placeholder='* Фамилия']"
-    )
-
-    ADDRESS_INPUT = (
-        By.XPATH,
-        "//input[@placeholder='* Адрес: куда привезти заказ']"
-    )
-
-    METRO_INPUT = (
-        By.XPATH,
-        "//input[@placeholder='* Станция метро']"
-    )
-
-
-
-    PHONE_INPUT = (
-        By.XPATH,
-        "//input[@placeholder='* Телефон: на него позвонит курьер']"
-    )
-
-    DATE_INPUT = (
-        By.XPATH,
-        "//input[@placeholder='* Когда привезти самокат']"
-    )
-
-    RENTAL_PERIOD = (
-        By.XPATH,
-        "//div[contains(@class, 'Dropdown-placeholder') and text()='* Срок аренды']"
-    )
-
-    BLACK_CHECKBOX = (
-        By.ID,
-        "black"
-    )
-
-    GREY_CHECKBOX = (
-        By.ID,
-        "grey"
-    )
-
-    COMMENT_INPUT = (
-        By.XPATH,
-        "//input[@placeholder='Комментарий для курьера']"
-    )
-
-    NEXT_BUTTON = (
-    By.XPATH,
-    "//button[text()='Далее']"
-    )
-
-    ORDER_BUTTON = (
-        By.XPATH,
-        "//button[contains(@class, 'Button_Middle__1CSJM') and text()='Заказать']"
-    )
-
-    CONFIRM_ORDER_BUTTON = (
-        By.XPATH,
-        "//button[contains(@class, 'Button_Middle__1CSJM') and text()='Да']"
-    )
-
-    SUCCESS_MESSAGE = (
-        By.XPATH,
-        "//*[contains(text(), 'Заказ оформлен')]"
-    )
-
-    STATUS_BUTTON = (
-        By.XPATH,
-        "//button[contains(@class, 'Button_Middle__1CSJM') and text()='Посмотреть статус']"
-    )
-
-
-
 
     def fill_customer_data(
             self,
@@ -93,30 +13,46 @@ class OrderPage(BasePage):
             address,
             phone
     ):
-        self.find_element(self.NAME_INPUT).send_keys(name)
-        self.find_element(self.SURNAME_INPUT).send_keys(surname)
-        self.find_element(self.ADDRESS_INPUT).send_keys(address)
-        self.find_element(self.PHONE_INPUT).send_keys(phone)
+        self.find_element(
+            OrderPageLocators.NAME_INPUT
+        ).send_keys(name)
+
+        self.find_element(
+            OrderPageLocators.SURNAME_INPUT
+        ).send_keys(surname)
+
+        self.find_element(
+            OrderPageLocators.ADDRESS_INPUT
+        ).send_keys(address)
+
+        self.find_element(
+            OrderPageLocators.PHONE_INPUT
+        ).send_keys(phone)
 
     def select_metro(self, metro):
-        metro_input = self.find_element(self.METRO_INPUT)
+        metro_input = self.find_element(
+            OrderPageLocators.METRO_INPUT
+        )
 
         metro_input.click()
         metro_input.send_keys(metro)
 
         metro_option = (
-            By.XPATH,
-            f"//*[normalize-space(text())='{metro}']"
+            OrderPageLocators.METRO_OPTION[0],
+            OrderPageLocators.METRO_OPTION[1].format(metro=metro)
         )
 
         self.click(metro_option)
 
-
     def fill_date(self, date):
-        self.find_element(self.DATE_INPUT).send_keys(date)
+        self.find_element(
+            OrderPageLocators.DATE_INPUT
+        ).send_keys(date)
 
     def select_date(self, date):
-        self.find_element(self.DATE_INPUT).click()
+        self.find_element(
+            OrderPageLocators.DATE_INPUT
+        ).click()
 
         date_obj = datetime.strptime(date, "%d.%m.%Y")
 
@@ -152,49 +88,51 @@ class OrderPage(BasePage):
         )
 
         date_element = (
-            By.XPATH,
-            f"//div[@role='button' and @aria-label=\"{aria_label}\"]"
+            OrderPageLocators.DATE_OPTION[0],
+            OrderPageLocators.DATE_OPTION[1].format(
+                aria_label=aria_label
+            )
         )
 
         self.click(date_element)
 
-
     def click_next(self):
-        self.click(self.NEXT_BUTTON)
+        self.click(OrderPageLocators.NEXT_BUTTON)
 
     def click_order(self):
-        self.click(self.ORDER_BUTTON)
+        self.click(OrderPageLocators.ORDER_BUTTON)
 
     def confirm_order(self):
-        self.click(self.CONFIRM_ORDER_BUTTON)
+        self.click(OrderPageLocators.CONFIRM_ORDER_BUTTON)
 
     def get_success_message(self):
-        return self.get_text(self.SUCCESS_MESSAGE)
-
-    def click_status(self):
-        self.click(self.STATUS_BUTTON)
-        
+        return self.get_text(
+            OrderPageLocators.SUCCESS_MESSAGE
+        )
 
     def click_rental_period(self):
-        self.click(self.RENTAL_PERIOD)
+        self.click(OrderPageLocators.RENTAL_PERIOD)
 
     def select_rental_period(self, period):
         rental_option = (
-            By.XPATH,
-            f"//div[@role='option' and text()='{period}']"
+            OrderPageLocators.RENTAL_OPTION[0],
+            OrderPageLocators.RENTAL_OPTION[1].format(
+                period=period
+            )
         )
 
         self.click(rental_option)
 
-
     def select_color(self, color):
         color_locator = {
-            "black": self.BLACK_CHECKBOX,
-            "grey": self.GREY_CHECKBOX
+            "black": OrderPageLocators.BLACK_CHECKBOX,
+            "grey": OrderPageLocators.GREY_CHECKBOX
         }
 
         self.click(color_locator[color])
 
     def fill_comment(self, comment):
-        self.find_element(self.COMMENT_INPUT).send_keys(comment)
+        self.find_element(
+            OrderPageLocators.COMMENT_INPUT
+        ).send_keys(comment)
 

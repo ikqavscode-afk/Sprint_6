@@ -1,33 +1,9 @@
+import allure
 import pytest
 
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
-
-
-ORDER_DATA = [
-    (
-        "Иван",
-        "Иванов",
-        "Москва, улица Ленина, 10",
-        "89991234567",
-        "Бульвар Рокоссовского",
-        "20.09.2026",
-        "сутки",
-        "black",
-        "Позвонить перед доставкой"
-    ),
-    (
-        "Пётр",
-        "Петров",
-        "Москва, улица Пушкина, 25",
-        "89997654321",
-        "Сокольники",
-        "21.09.2026",
-        "двое суток",
-        "grey",
-        "Позвонить за час"
-    )
-]
+from data.order_data import ORDER_DATA
 
 
 @pytest.mark.parametrize(
@@ -56,8 +32,7 @@ def test_order_customer_data(
     main_page = MainPage(driver)
     order_page = OrderPage(driver)
 
-    main_page.open(main_page.URL)
-
+    main_page.open_main_page()
     main_page.accept_cookies()
 
     main_page.click_order_button(order_button)
@@ -87,6 +62,3 @@ def test_order_customer_data(
     order_page.confirm_order()
 
     assert "Заказ оформлен" in order_page.get_success_message()
-
-    order_page.click_status()
-
